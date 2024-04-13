@@ -69,9 +69,7 @@ export function AuthFunction(props) {
           },
         }
       );
-      console.log("things are workign or not")
       if (!response.ok) {
-        console.log("i think there is an error")
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
       handleExistingUsers(); // Assuming this function updates the list of existing users
@@ -81,7 +79,7 @@ export function AuthFunction(props) {
       return { success: false, message: "Not able to Delete the document!" };
     }
   }
-  
+
   // Route 4 : To edit exiting suer.
   async function handleEditUser(id, name, age, gender, mobileNumber) {
     try {
@@ -95,12 +93,14 @@ export function AuthFunction(props) {
           body: JSON.stringify({ name, age, gender, mobileNumber }),
         }
       );
-      handleExistingUsers();
+      handleExistingUsers(); 
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
+      return { success: true, message: "Edit Successful" };
     } catch (error) {
       console.error("Error fetching notes:", error);
+      return { success: false, message: "Edit Unsuccessful" };
     }
   }
 

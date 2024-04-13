@@ -6,7 +6,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { FrontAuthContext } from "../Context/front-auth";
+import { FrontAuthContext } from "../Context/Context";
 import TableValues from "../components/tableData";
 import { styled } from '@mui/material/styles';
 import { tableCellClasses } from '@mui/material/TableCell';
@@ -29,8 +29,7 @@ export default function BasicTable() {
   const { existingDocuments } = documents;
 
   return (
-    <div className="table-width">
-      <TableContainer  component={Paper}>
+      <TableContainer className="max-w-max "  component={Paper}>
         <Table aria-label="customized table">
           <TableHead>
             <TableRow>
@@ -44,13 +43,11 @@ export default function BasicTable() {
           <TableBody>
             {existingDocuments
               ? existingDocuments.map((data) => {
-                  // console.log("let see the data = ", data);
                   return <TableValues data={data} />;
                 })
               : ""}
           </TableBody>
         </Table>
       </TableContainer>
-    </div>
   );
 }

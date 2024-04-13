@@ -3,8 +3,8 @@ import { Slide, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import NotFoundPage from "./Pages/NotFound";
-import FrontPage from "./layout/FrontPage";
-import { AuthFunction } from "./Context/front-auth";
+import FrontPage from "./Pages/FrontPage";
+import { AuthFunction } from "./Context/Context";
 
 function App() {
   return (

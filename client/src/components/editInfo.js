@@ -5,7 +5,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import { FrontAuthContext } from "../Context/front-auth";
+import { FrontAuthContext } from "../Context/Context";
 import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
 import { toast } from "react-toastify";
@@ -29,7 +29,7 @@ export default function FormDialog({ open, openState, entireDocument }) {
   function handleClose() {
     openState(false);
   }
-  function handleEdit() {
+  async function handleEdit() {
     openState(false);
     const { id, name, age, gender, mobileNumber } = combinedState;
 
@@ -52,7 +52,15 @@ export default function FormDialog({ open, openState, entireDocument }) {
       toast.error("Please enter a valid mobile number of 10 digits");
       return;
     }
-    handleEditUser(id, name, age, gender, mobileNumber);
+    returnResponse(await handleEditUser(id, name, age, gender, mobileNumber));
+  }
+
+  function returnResponse(response) {
+    if (response.success) {
+      toast.success(response.message);
+    } else {
+      toast.error(response.message);
+    }
   }
   return (
     <Dialog open={open} onClose={handleClose}>
@@ -116,10 +124,10 @@ export default function FormDialog({ open, openState, entireDocument }) {
         />
       </DialogContent>
       <DialogActions className="mb-3">
-        <Button onClick={handleClose} className="text-white bg-black">
+        <Button sx={{ color: "black" }} onClick={handleClose}>
           Cancel
         </Button>
-        <Button onClick={handleEdit} className="text-white bg-black">
+        <Button sx={{ color: "black" }} onClick={handleEdit}>
           Edit Note
         </Button>
       </DialogActions>
