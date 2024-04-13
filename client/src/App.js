@@ -1,24 +1,24 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { Slide, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import NotFoundPage from "./Pages/NotFound";
+import FrontPage from "./Pages/FrontPage";
+import { AuthFunction } from "./Context/Context";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <AuthFunction>
+        <Router>
+          <Routes>
+            <Route exact path="/" element={<FrontPage />} />
+            <Route exact path="*" element={<NotFoundPage />} />
+          </Routes>
+        </Router>
+        <ToastContainer autoClose={2000} transition={Slide} />
+      </AuthFunction>
+    </>
   );
 }
 
