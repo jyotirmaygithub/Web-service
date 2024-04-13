@@ -15,11 +15,8 @@ app.use(cors());
 app.use(express.json());
 
 // available routes in the project
-app.use("/api/auth", require("./routes/auth"));
-// app.use("/api/editProfile" , require("./routes/editProfile"))
-// app.use("/api/retriveData" ,require("./routes/retriveData"))
-// app.use("/api/booking" , require("./routes/booking"))
+app.use("/api/user", require("./routes/user"));
 
 app.listen(port, () => {
-  console.log(`hotel-backend is working on port number :  ${port}`);
+  console.log(`user-backend is working on port number :  ${port}`);
 });

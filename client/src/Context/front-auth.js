@@ -1,157 +1,117 @@
-import React, { useContext, createContext, useEffect } from "react";
-import { jwtDecode } from "jwt-decode";
-import { TokenStatusContext } from "./tokenStatus";
-// import { StateContext } from "./States";
+import React, { useContext, createContext, useEffect, useState } from "react";
 
 const FrontAuth = createContext();
 
 export function AuthFunction(props) {
-  const { getAuthToken, checkCookie } = TokenStatusContext();
-  // const { setUserDocument } = StateContext();
-
+  const [documents, setDocuments] = useState([]);
   useEffect(() => {
-    if (checkCookie) {
-      handleExistingUserData();
-    }
+    handleExistingUsers();
   }, []);
 
-  // function  : To store auth token in the cookie..
-  function storeAuthToken(userAuth_Token) {
-    // Set the cookie with an expiration time
-    const expirationDate = new Date();
-    expirationDate.setDate(expirationDate.getDate() + 7); // Set to expire in 7 days
-    document.cookie = `auth-token=${
-      userAuth_Token.auth_token
-    }; expires=${expirationDate.toUTCString()}; path=/`;
-  }
-
   // Route 1 : handling creation of new user.
-  async function handleCreateUser(name, email, password) {
+  async function handleCreateUser(name, age, gender, mobileNumber) {
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_DEV_URL}/api/auth/newuser`,
+        `${process.env.REACT_APP_DEV_URL}/api/user/newuser`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ name, email, password }),
+          body: JSON.stringify({ name, age, gender, mobileNumber }),
         }
       );
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
-      const userAuth_Token = await response.json();
-      if (userAuth_Token.auth_token) {
-        console.log("this is the authtoken = " + userAuth_Token);
-        storeAuthToken(userAuth_Token);
-      }
-      return { success: true, message: "Your Account has been created!" };
+      handleExistingUsers();
+      console.log(await response.text());
+      return { success: true, message: "user data has been stored!" };
     } catch (error) {
       console.error("Error creating user:", error);
       return { success: false, message: error.message };
     }
   }
 
-  // Route 2 : handling existing user.
-  async function handleExistingUser(email, password) {
+  // Route 2 : handling existing users.
+  async function handleExistingUsers() {
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_DEV_URL}/api/auth/newuser`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email, password }),
-        }
-      );
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-      const userAuth_Token = await response.json();
-      if (userAuth_Token.auth_token) {
-        console.log("this is the authtoken = " + userAuth_Token);
-        storeAuthToken(userAuth_Token);
-      }
-      return { success: true, message: "Login successfully" };
-    } catch (error) {
-      console.error("Error creating user:", error);
-      return { success: false, message: error.message };
-    }
-  }
-
-  // Route 3 : handling google login.
-  async function handleGoogleLogin(credential) {
-    const dataObject = jwtDecode(credential);
-    console.log("dataobject values = ", dataObject);
-    return handleGoogleUser(dataObject.name, dataObject.email);
-  }
-
-  // Route 4 : handling google authenticating users.
-  async function handleGoogleUser(name, email) {
-    try {
-      const response = await fetch(
-        `${process.env.REACT_APP_DEV_URL}/api/auth/google-auth`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ name, email }),
-        }
-      );
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-      const userAuth_Token = await response.json();
-      if (userAuth_Token.auth_token) {
-        console.log("this is the authtoken = " + userAuth_Token);
-        storeAuthToken(userAuth_Token);
-      }
-      return { success: true, message: "Login successfully" };
-    } catch (error) {
-      console.error("Error creating user:", error);
-      return { success: false, message: error.message };
-    }
-  }
-
-  // Route 5 : To fetch existing user data.
-  async function handleExistingUserData() {
-    try {
-      const response = await fetch(
-        `${process.env.REACT_APP_DEV_URL}/api/auth/user-data`,
+        `${process.env.REACT_APP_DEV_URL}/api/user/documents`,
         {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            "auth-token": getAuthToken(),
           },
         }
       );
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
-      const userData = await response.json();
-      // storing userDocument into the context api state.
-      if (userData) {
-        // setUserDocument(userData.user_data);
-      }
+      const userDocuments = await response.json();
+      setDocuments(userDocuments);
+      // console.log(userDocuments)
     } catch (error) {
-      console.error("Error creating user:", error.message);
+      console.error("Error creating user:", error);
     }
   }
 
-
+  // Route 3 : To delete a user.
+  async function handleDeleteUser(id) {
+    console.log("id = ", id);
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_DEV_URL}/api/user/delete/${id}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log("things are workign or not")
+      if (!response.ok) {
+        console.log("i think there is an error")
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      handleExistingUsers(); // Assuming this function updates the list of existing users
+      return { success: true, message: "Delete Successful" };
+    } catch (error) {
+      console.error("Error fetching notes:", error);
+      return { success: false, message: "Not able to Delete the document!" };
+    }
+  }
+  
+  // Route 4 : To edit exiting suer.
+  async function handleEditUser(id, name, age, gender, mobileNumber) {
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_DEV_URL}/api/user/edit/${id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ name, age, gender, mobileNumber }),
+        }
+      );
+      handleExistingUsers();
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+    } catch (error) {
+      console.error("Error fetching notes:", error);
+    }
+  }
 
   return (
     <FrontAuth.Provider
       value={{
         handleCreateUser,
-        handleExistingUser,
-        // handleEditProfile,
-        handleGoogleLogin,
-        handleExistingUserData,
+        handleExistingUsers,
+        documents,
+        handleDeleteUser,
+        handleEditUser,
       }}
     >
       {props.children}

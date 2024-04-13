@@ -6,13 +6,16 @@ const userDetails = new Schema({
     type: String,
     required: true,
   },
-  email: {
+  age: {
     type: String,
     required: true,
-    unique: true,
   },
-  password: {
+  gender: {
     type: String,
+    required: true,
+  },
+  mobileNumber: {
+    type: Number,
     required: true,
   },
   date: {
