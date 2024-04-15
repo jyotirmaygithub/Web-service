@@ -25,7 +25,6 @@ export function AuthFunction(props) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
       handleExistingUsers();
-      console.log(await response.text());
       return { success: true, message: "user data has been stored!" };
     } catch (error) {
       console.error("Error creating user:", error);
@@ -50,7 +49,6 @@ export function AuthFunction(props) {
       }
       const userDocuments = await response.json();
       setDocuments(userDocuments);
-      // console.log(userDocuments)
     } catch (error) {
       console.error("Error creating user:", error);
     }
@@ -58,7 +56,6 @@ export function AuthFunction(props) {
 
   // Route 3 : To delete a user.
   async function handleDeleteUser(id) {
-    console.log("id = ", id);
     try {
       const response = await fetch(
         `${process.env.REACT_APP_DEV_URL}/api/user/delete/${id}`,

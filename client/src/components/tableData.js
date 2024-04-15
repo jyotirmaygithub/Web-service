@@ -42,7 +42,6 @@ export default function TableData(props) {
   // Function to handle user deletion
   async function handleDelete(id) {
     const response = await handleDeleteUser(id);
-    console.log("Deleted User: ", response);
     returnResponse(response);
   }
 
@@ -61,7 +60,7 @@ export default function TableData(props) {
       <StyledTableCell>{data.age}</StyledTableCell>
       <StyledTableCell>{data.gender}</StyledTableCell>
       <StyledTableCell>{data.mobileNumber}</StyledTableCell>
-      <StyledTableCell className="space-x-2">
+      <StyledTableCell className="space-x-2 flex-wrap">
         <Button
           sx={{
             background: "black",
@@ -69,6 +68,7 @@ export default function TableData(props) {
             "&:hover": {
               background: "white",
               color: "black",
+
               border: "1px solid black",
             },
           }}
