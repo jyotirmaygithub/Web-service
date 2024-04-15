@@ -25,7 +25,6 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 export default function BasicTable() {
   const { documents } = FrontAuthContext();
 
-  console.log("documents = ", documents);
   const { existingDocuments } = documents;
 
   return (

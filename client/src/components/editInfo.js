@@ -12,7 +12,6 @@ import { toast } from "react-toastify";
 
 export default function FormDialog({ open, openState, entireDocument }) {
   const { handleEditUser } = FrontAuthContext();
-  console.log("id on edit info = ", entireDocument);
   let { _id, name, age, gender, mobileNumber } = entireDocument;
   const [combinedState, setCombinedState] = useState({
     id: _id,

@@ -47,8 +47,7 @@ export default function BasicTextFields() {
       return;
     }
 
-    // If all fields are valid, proceed with form submission
-    console.log("Form submitted:", combinedState);
+    // If all fields are valid, proceed with form submission;
     returnResponse(await handleCreateUser(name, age, gender, mobile));
   }
 
